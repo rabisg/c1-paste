@@ -6,6 +6,7 @@ function App() {
   const [c1Response, setC1Response] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [copyFeedback, setCopyFeedback] = useState("");
+  const [parseError, setParseError] = useState<string>("");
 
   const decompressAndDecode = async (compressed: string): Promise<string> => {
     if (typeof DecompressionStream === "undefined") {
@@ -74,11 +75,13 @@ function App() {
     const value = event.target.value;
     setInputValue(value);
     setC1Response(value);
+    setParseError(""); // Clear any previous errors
   };
 
   const handleClear = () => {
     setInputValue("");
     setC1Response("");
+    setParseError("");
     // Clear URL parameter
     const url = new URL(window.location.href);
     url.searchParams.delete("c");
@@ -155,6 +158,10 @@ function App() {
     }
   };
 
+  const onC1Error = (error: { code: number; c1Response: string }) => {
+    setParseError(`Failed to parse C1 response. Error code: ${error.code}`);
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -186,11 +193,30 @@ function App() {
       {c1Response && (
         <div className="output-section">
           <h2>Rendered Output</h2>
-          <div className="c1-output">
-            <ThemeProvider>
-              <C1Component c1Response={c1Response} isStreaming={false} />
-            </ThemeProvider>
-          </div>
+          {parseError ? (
+            <div
+              className="error-message"
+              style={{
+                padding: "1rem",
+                backgroundColor: "#fee",
+                border: "1px solid #fcc",
+                borderRadius: "4px",
+                color: "#c33",
+              }}
+            >
+              {parseError}
+            </div>
+          ) : (
+            <div className="c1-output">
+              <ThemeProvider>
+                <C1Component
+                  c1Response={c1Response}
+                  isStreaming={false}
+                  onError={onC1Error}
+                />
+              </ThemeProvider>
+            </div>
+          )}
         </div>
       )}
     </div>
