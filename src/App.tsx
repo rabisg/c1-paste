@@ -193,7 +193,16 @@ function App() {
       {c1Response && (
         <div className="output-section">
           <h2>Rendered Output</h2>
-          {parseError ? (
+          <div className="c1-output">
+            <ThemeProvider>
+              <C1Component
+                c1Response={c1Response}
+                isStreaming={false}
+                onError={onC1Error}
+              />
+            </ThemeProvider>
+          </div>
+          {parseError && (
             <div
               className="error-message"
               style={{
@@ -202,19 +211,10 @@ function App() {
                 border: "1px solid #fcc",
                 borderRadius: "4px",
                 color: "#c33",
+                marginTop: "1rem",
               }}
             >
               {parseError}
-            </div>
-          ) : (
-            <div className="c1-output">
-              <ThemeProvider>
-                <C1Component
-                  c1Response={c1Response}
-                  isStreaming={false}
-                  onError={onC1Error}
-                />
-              </ThemeProvider>
             </div>
           )}
         </div>
