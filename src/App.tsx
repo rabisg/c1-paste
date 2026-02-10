@@ -196,7 +196,7 @@ function App() {
           <div className="c1-output">
             <ThemeProvider>
               <C1Component
-                c1Response={c1Response}
+                c1Response={c1Response.trim().replace(/\\`/g, "`").replace(/\\'/g, "'")}
                 isStreaming={false}
                 onError={onC1Error}
               />
