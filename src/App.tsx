@@ -214,6 +214,7 @@ function App() {
                 c1Response={c1Response.trim()}
                 isStreaming={false}
                 onError={onC1Error}
+                key={c1Response.trim()}
               />
             </ThemeProvider>
           </div>
