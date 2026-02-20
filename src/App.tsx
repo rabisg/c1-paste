@@ -71,10 +71,25 @@ function App() {
     }
   }, []);
 
+  const unescapeJsString = (str: string): string => {
+    return str.replace(/\\(.)/g, (_match, char) => {
+      switch (char) {
+        case 'n': return '\n';
+        case 't': return '\t';
+        case 'r': return '\r';
+        case '"': return '"';
+        case "'": return "'";
+        case '\\': return '\\';
+        case '`': return '`';
+        default: return _match; // Keep unknown escapes as-is
+      }
+    });
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value;
     setInputValue(value);
-    setC1Response(value);
+    setC1Response(unescapeJsString(value));
     setParseError(""); // Clear any previous errors
   };
 
@@ -192,11 +207,11 @@ function App() {
 
       {c1Response && (
         <div className="output-section">
-          <h2>Rendered Output</h2>
+          <h2>Rendered Output hello</h2>
           <div className="c1-output">
             <ThemeProvider>
               <C1Component
-                c1Response={c1Response.trim().replace(/\\`/g, "`").replace(/\\'/g, "'")}
+                c1Response={c1Response.trim()}
                 isStreaming={false}
                 onError={onC1Error}
               />
