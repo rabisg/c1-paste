@@ -207,7 +207,7 @@ function App() {
 
       {c1Response && (
         <div className="output-section">
-          <h2>Rendered Output hello</h2>
+          <h2>Rendered Output</h2>
           <div className="c1-output">
             <ThemeProvider>
               <C1Component
